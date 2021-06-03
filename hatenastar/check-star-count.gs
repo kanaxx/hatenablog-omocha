@@ -20,9 +20,9 @@ function bootstrap() {
     return;
   }
 
-  var startCell = '';
+  var startCell = startCellOfBlogEntry;
 
-  if(!dataSheet.getRange(startCellOfBlogEntry).isBlank()){
+  if(!dataSheet.getRange(startCellOfBlogEntry).offset(0,2).isBlank()){
     var ans = Browser.msgBox('前回の結果が残っているようです。続きから実行しますか？', Browser.Buttons.YES_NO_CANCEL);
 
     if(ans=='yes'){
