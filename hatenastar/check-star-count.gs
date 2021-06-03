@@ -38,7 +38,9 @@ function bootstrap() {
       return;
     }
   }
-  checkEntry(startCell);
+  var count= checkEntry(startCell);
+  Browser.msgBox('終わりました。実施件数' + count + '件');
+
 }
 
 
@@ -158,6 +160,7 @@ function checkEntry(startCellAddress){
 
     entryRange = entryRange.offset(1,0);
   }
+  return entryCount;
 }
 
 function getSheet(name){
