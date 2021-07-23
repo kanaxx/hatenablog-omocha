@@ -1,7 +1,7 @@
 <?php
 //set your information
-$hatenaId = 'kanaxx43';
-$hatenaDomain = 'kanaxx43.hatenablog.com';
+$hatenaId = '';
+$hatenaDomain = '';
 $password = '';
 
 $ch = curl_init();
