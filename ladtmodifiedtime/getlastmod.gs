@@ -85,14 +85,15 @@ function fetchSitemaps(sitemapIndexUrl, sitemapSheet, dataSheet){
 }
 
 function getLastMod(url){
-  let lastmod='';
+  let lastmod ;
   let dataSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(dataWorksheetName);
   let targetRange = dataSheet.getRange("A:A");
   let finder = targetRange.createTextFinder(url).matchEntireCell(true);
   let res = finder.findNext();
   if(res !== null) {
     if(!res.offset(0,1).isBlank()){
-      lastmod = Utilities.formatDate(res.offset(0,1).getValue(), 'Asia/Tokyo', 'yyyy-MM-dd HH:mm:ss');
+      // lastmod = Utilities.formatDate(res.offset(0,1).getValue(), 'Asia/Tokyo', 'yyyy-MM-dd 00:00:00');
+      lastmod = new Date(res.offset(0,1).getValue());
     }
   }
   return lastmod;
@@ -124,17 +125,8 @@ function fetch(url){
   return null;
 }
 
-// parameter url
-function doGet(e){
-  let url = e.parameter.url;
-  let lastmod = "";
-  if(url != null){
-    lastmod=getLastMod(url);
-  }
-  return ContentService.createTextOutput(lastmod);
-}
-
-function testDoGet(){
+// for testing
+function testLastMod(){
   let url = 'https://kanaxx.hatenablog.jp/entry/typec-cable';
   let lastmod = getLastMod(url);
   console.log(lastmod);
