@@ -1,0 +1,15 @@
+<script>
+  let lastmodURL = 'https://script.google.com/macros/s/AKfycbzBcLCEZUO6KQBFZdBSzbaUZnzn-oSjFvu4mFU-VV5Vmane5M6ka2CnhVcVWzS2fkHLVA/exec';
+  fetch( lastmodURL + '?url=' + location.href)
+  .then(response=>response.json())
+  .then(lastmod=>{
+    console.log(lastmod);
+    if(lastmod !=null && $('div.entry-date').length==1){
+      let diffText = '';
+      if( lastmod.diffDays > 0) { diffText =   ' (' + lastmod.diffDays +'日前)';}
+      if( lastmod.diffMonths > 0 ){ diffText = ' (' + lastmod.diffMonths +'ヵ月前)';}
+      if( lastmod.diffYears > 0 ){ diffText =  ' (' + lastmod.diffYears+'年前)';}
+      $('div.entry-date').after('<span class="entry-lastmod">更新日：'+lastmod.shortDate + diffText+'</span>');
+    }
+  });
+</script>
