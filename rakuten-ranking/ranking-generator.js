@@ -1,8 +1,9 @@
 // author kanaxx.
+  const affiliateId = "04021205.0d23044c.04021206.437bb859";
+  const applicationId = "1027300763038019149";
+
   let r10AffConfig = null;
   let r10AffParts = null;
-  const applicationId = "1027300763038019149";
-  const affiliateId = "04021205.0d23044c.04021206.437bb859";
   const r10ApiUrl = 'https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20170628?format=json&formatVersion=2';
   const defaultConfig = {display:10, period:"realtime", applicationId, affiliateId};
 
