@@ -1,7 +1,7 @@
 // author kanaxx.
   const affiliateId = "xxx";
-  const display=10;
   const applicationId = "xxx";
+  const display=10;
 
   let r10AffConfig = null;
   let r10AffParts = null;
