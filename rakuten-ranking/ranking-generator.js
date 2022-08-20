@@ -1,7 +1,7 @@
 // author kanaxx.
-  const affiliateId = "04021205.0d23044c.04021206.437bb859";
+  const affiliateId = "xxx";
   const display=10;
-  const applicationId = "1027300763038019149";
+  const applicationId = "xxx";
 
   let r10AffConfig = null;
   let r10AffParts = null;
