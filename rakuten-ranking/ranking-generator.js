@@ -116,20 +116,26 @@
         let e = null;
 
         //link
-        if(href = r10Items[i]['affiliateUrl']){
-          if( e = html.querySelector('.raku_affiliateUrl') ){
-            e.setAttribute('href', href);
+        ['affiliateUrl','itemUrl','shopUrl'].forEach(n=>{
+          if(href = r10Items[i][n]){
+            if( e = html.querySelector(`a.raku_${n}`) ){
+              e.setAttribute('href', href);
+            }
           }
-        }
+        });
+        
         //img
-        if(src = r10Items[i]['mediumImageUrls']){
-          if( e = html.querySelector('.raku_mediumImageUrls')){
-            e.setAttribute('src', src[0]);
+        ['mediumImageUrls','smallImageUrls'].forEach(n=>{
+          if(src = r10Items[i][n]){
+            if( e = html.querySelector(`img.raku_${n}`)){
+              e.setAttribute('src', src[0]);
+            }
           }
-        }
+        });
+        
         //other
         for(let name in r10Items[i]){
-          if( e = html.querySelector('span.raku_' + name) ){
+          if( e = html.querySelector(`span.raku_${name}`) ){
             e.innerHTML = r10Items[i][name];
           }
         }
