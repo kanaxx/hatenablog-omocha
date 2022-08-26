@@ -1,19 +1,26 @@
+<!DOCTYPE html>
 <html>
-<head>
-  <title>簡単にランキングコンテンツを作成します</title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>簡単にランキングコンテンツを作成するページ</title>
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"> -->
+  </head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
 </head>
 <body>
-  <h1>楽天のランキングをコンテンツ化するページ</h1>
+<div class="content">
+
+  <h1>楽天のランキングパーツを作る！</h1>
   楽天のリアルタイムランキングを参照し、ブログに埋め込むパーツ生成するJavaScriptのテストページです。<br>
   HTMLの貼り付けて生成ボタンを押すと、HTMLにランキングデータを埋め込むことができます。<br>
-  作った経緯はブログに書いてあります。使い方はGithubに書きます。
+  サンプルを3つおいてあります。作った経緯は<a href="https://kanaxx.hatenablog.jp/entry/realtime-ranking-parts">ブログ</a>に書いてあります。使い方とソースコードは<a href="https://github.com/kanaxx/hatenablog-omocha/tree/main/rakuten-ranking">Github</a>に書いてあります。
   <li><a href="sample.html">シンプルなサンプル</a>｜<a href="sample-table.html">テーブルのサンプル</a>｜<a href="sample-sidebar.html">サイドバー風</a></li>
-  <li><a href="https://kanaxx.hatenablog.jp/entry/realtime-ranking-parts">ブログページ</a>｜<a href="https://github.com/kanaxx/hatenablog-omocha/tree/main/rakuten-ranking">GitHub</a></li>
+  
 
   <h2>1. APIの結果を埋め込むHTMLのテンプレートを入力</h2>
   <div  style="padding:10px">
-    <textarea id="html-template" cols="130" rows="20" style="height:200px">
+    <textarea id="html-template"  class="input" style="height:200px">
 <div id="rakuten-aff-parts">
   <h3>楽天市場のリアルタイムランキング</h3>
   <p>最終更新日：<span data-raku="lastBuildDate"></span></p>
@@ -33,11 +40,11 @@
 
   <h2>2. ジャンルと取得件数を設定</h2>
   <div id="rakuten-aff-config" style="padding:10px">
-    楽天のジャンルID：<input type="text" name="genreId" value="564895"><br>
-    取得件数（1-30）：<input type="text" name="display" value="10"><br>
+    楽天のジャンルID：<input type="text" class="input" name="genreId" value="564895"><br>
+    取得件数（1-30）：<input type="text" class="input" name="display" value="10"><br>
     
     <input type="hidden" name="applicationId" value="1027300763038019149"> <input type="hidden" name="affiliateId" value="04021205.0d23044c.04021206.437bb859"><br>
-    <button id="btn" onclick="btn();"> 生成する</button>
+    <button id="btn"  class="button" onclick="btn();"> 生成する</button>
 
   </div>
 
@@ -49,6 +56,7 @@
     <div id="rakuten-aff-parts"></div>
   </div>
 
+</div>
 </body>
 
 <script src="./ranking-generator.js"></script>
