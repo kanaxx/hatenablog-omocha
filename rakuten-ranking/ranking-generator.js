@@ -1,52 +1,48 @@
 // author:kanaxx.
 // see also: https://kanaxx.hatenablog.jp/entry/realtime-ranking-parts
-
-const affiliateId = "xxx";
-const applicationId = "xxx";
-const display=10;
+const rakutenAffConfig = {
+  affiliateId : "04021205.0d23044c.04021206.437bb859",
+  applicationId : "1027300763038019149",
+  display : 10,
+  genreId:0,
+}
 
 let r10AffConfig = null;
 let r10AffParts = null;
-const r10ApiUrl = 'https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20170628?format=json&formatVersion=2';
-const defaultConfig = {period:"realtime", display, applicationId, affiliateId};
+const r10ApiUrl = 'https://app.rakuten.co.jp/services/api/IchibaItem/Ranking/20170628?format=json&formatVersion=2&period=realtime';
 
-window.addEventListener("load", () => {
-  if( r10AffParts ){
-    window.addEventListener("scroll", showRakutenAffItems);
-    showRakutenAffItems();
-  }
-});
+setRakutenAff();
+showRakutenAffItems();
 
 function setRakutenAff(){
   r10AffConfig = document.getElementById('rakuten-aff-config');
   r10AffParts = document.getElementById('rakuten-aff-parts');
+
+  if( r10AffParts ){
+    window.addEventListener("scroll", showRakutenAffItems);
+    console.info('RakutenAff - added scroll event.')
+  }
 }
-setRakutenAff();
 
-function makeApiConfig(){
-  const config = defaultConfig??{};
-
+function makeApiConfig(conf){
   if(r10AffConfig){
-    const f = (p)=>{
-      const input = r10AffConfig.querySelector(`input[name="${p}"]`);
-      console.log(input);
-      if(input){
-        return input.value;
+    const f = (conf,p)=>{
+      if( input = r10AffConfig.querySelector(`input[name="${p}"]`) ){
+        conf[p] = input.value;
       }
     };
-    config.genreId = f('genreId')??"0";
-    config.applicationId = f('applicationId')??config.applicationId;
-    config.affiliateId = f('affiliateId')??config.affiliateId ;
-    config.display = f('display')??config.display??10;
+    f(conf, 'genreId');
+    f(conf, 'applicationId');
+    f(conf, 'affiliateId');
+    f(conf, 'display');
   }
-  return config;
 }
 
-function makeApiElements(){
-  const items = r10AffParts.querySelectorAll('[class^="raku_"]');
+function makeApiElements(e){
+  const items = e.querySelectorAll('[data-raku]');
   const params = [];
   items.forEach(function(item) {
-    params.push(item.className.replace('raku_',''));
+    params.push(item.dataset.raku);
   });
   return params;
 }
@@ -63,6 +59,9 @@ async function callRakutenAPI(url) {
 }
 
 function checkRakutenAffItemsArea(trigger){
+  if(!trigger){
+    return false;
+  }
   targetTop = trigger.getBoundingClientRect().top;
   //console.log('div=%s, windows=%s', targetTop, window.innerHeight);
   return (targetTop <= window.innerHeight);
@@ -75,29 +74,31 @@ function formatDate(datetime){
 }
 
 function showRakutenAffItems(){
-  setRakutenAff();
-
   if( !checkRakutenAffItemsArea(r10AffParts) ){
     return;
   }
-  window.removeEventListener("scroll", showRakutenAffItems);
+  console.info('RakutenAff - start.')
 
-  const config = makeApiConfig();
-  console.log(config);
-  
-  const params = makeApiElements();
+  window.removeEventListener("scroll", showRakutenAffItems);
+  console.info('RakutenAff - removed scroll event.')
+
+  makeApiConfig(rakutenAffConfig);
+  console.log(rakutenAffConfig);
+
+  const params = makeApiElements(r10AffParts);
   console.log(params);
   
   let url = r10ApiUrl;
 
-  for( const name in config){
-    console.log(name, config[name]);
-    url = url + '&' + name + '=' + config[name];
+  for( const name in rakutenAffConfig){
+    // console.log(name, rakutenAffConfig[name]);
+    url = url + '&' + name + '=' + rakutenAffConfig[name];
   }
   if(params.length>0){
     url = url + '&elements=' + params.join();
   }
-  
+
+  console.info('RakutenAff - call Rakuten API.')
   callRakutenAPI(url).then(response => {
     console.log(response);
     if(response.error){
@@ -106,23 +107,30 @@ function showRakutenAffItems(){
       return;
     }
 
+    const itemHtml = r10AffParts.querySelector('.rakuten-aff-item');
+    if(!itemHtml){
+      return;
+    }
+
+    let insertNode = itemHtml;
+    const r10Items = response.Items;
+    
     if(lastBuild = response['lastBuildDate']){
-      if( e = r10AffParts.querySelector('.raku_lastBuildDate') ){
+      if( e = r10AffParts.querySelector('[data-raku="lastBuildDate"]') ){
         e.innerHTML = formatDate(lastBuild);
       }
     }
-    const itemHtml = r10AffParts.querySelector('.rakuten-aff-item');
-    const r10Items = response.Items;
 
     for(let i=0; i<r10Items.length; i++){
-      const html = itemHtml.cloneNode(true);
+      const newHtml = itemHtml.cloneNode(true);
       let e = null;
 
       //link
       ['affiliateUrl','itemUrl','shopUrl'].forEach(n=>{
         if(href = r10Items[i][n]){
-          if( e = html.querySelector(`a.raku_${n}`) ){
+          if( e = newHtml.querySelector(`a[data-raku="${n}"]`) ){
             e.setAttribute('href', href);
+            e.dataset.raku=`_${n}`;
           }
         }
       });
@@ -130,23 +138,29 @@ function showRakutenAffItems(){
       //img
       ['mediumImageUrls','smallImageUrls'].forEach(n=>{
         if(src = r10Items[i][n]){
-          if( e = html.querySelector(`img.raku_${n}`)){
+          if( e = newHtml.querySelector(`img[data-raku="${n}"]`)){
             e.setAttribute('src', src[0]);
+            e.dataset.raku=`_${n}`;
           }
         }
       });
       
       //other
-      for(let name in r10Items[i]){
-        if( e = html.querySelector(`span.raku_${name}`) ){
-          e.innerHTML = r10Items[i][name];
+      for(let n in r10Items[i]){
+        if( e = newHtml.querySelector(`[data-raku="${n}"]`) ){
+          e.innerHTML = r10Items[i][n];
         }
       }
-      r10AffParts.appendChild(html);
-      html.style.display = 'block';
-      if((i+1) >= config.display){
+
+      insertNode.parentElement.insertBefore(newHtml, insertNode.nextSibling);
+      insertNode = newHtml;
+
+      if((i+1) >= rakutenAffConfig.display){
         break;
       }
     }
+    //remove default template html
+    itemHtml.remove();
+    console.info('RakutenAff - end.')
   }); 
 }
