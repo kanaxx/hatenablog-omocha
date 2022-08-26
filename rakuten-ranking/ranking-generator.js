@@ -1,8 +1,8 @@
 // author:kanaxx.
 // see also: https://kanaxx.hatenablog.jp/entry/realtime-ranking-parts
 const rakutenAffConfig = {
-  affiliateId : "04021205.0d23044c.04021206.437bb859",
-  applicationId : "1027300763038019149",
+  affiliateId : "xxx",
+  applicationId : "xxx",
   display : 10,
   genreId:0,
 }
