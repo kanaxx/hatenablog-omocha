@@ -15,12 +15,12 @@ https://kanaxx.github.io/rakuten-ranking/
 ```HTML
  <div id="rakuten-aff-parts">
     <h3>楽天市場のリアルタイムランキング</h3>
-    <div class="rakuten-aff-item" style="display:none">
-      <span><span class="raku_rank"></span> 位</span><br>
-      <span><span class="raku_itemPrice"></span> 円</span><br>
-      <a href="" class="raku_affiliateUrl">
-        <img src="" class="raku_mediumImageUrls" style="float:left">
-        <span class="raku_itemName" class="font-size:70%;"></span>
+    <div class="rakuten-aff-item">
+      <span><span data-raku="rank"></span> 位</span><br>
+      <span><span data-raku="itemPrice"></span> 円</span><br>
+      <a href="" data-raku="affiliateUrl">
+        <img src="" data-raku="mediumImageUrls" style="float:left">
+        <span data-raku="itemName" class="font-size:70%;"></span>
       </a>
       <br style="clear: left;">
     </div>
@@ -31,10 +31,9 @@ https://kanaxx.github.io/rakuten-ranking/
 
 - 一番大きな枠組は`id=rakuten-aff-parts`を付ける。ページ内に1つだけ
 - rakuten-aff-partsの内側に、`class="rakuten-aff-item"`を作る
-- class="rakuten-aff-item"の内側に、データ表示用のタグを作る。class名は、raku_ + APIのプロパティ名にする
+- class="rakuten-aff-item"の内側にデータ表示用のタグを作る。データ用のタグには、data-raku="APIのプロパティ名" にする
 
 class="rakuten-aff-item"はランキング表示数だけコピーします。10位までなら10回繰り返します。繰り返されることを前提にデザインを組み立ててください。
-`display:none`が初期状態ですが、データの埋め替えが成功したらdisplay:blockに切り替えています。
 
 # 値の埋め込み
 テンプレートHTMLには、以下のルールにのっとってAPIの値を埋めこみます。
@@ -43,39 +42,39 @@ class="rakuten-aff-item"はランキング表示数だけコピーします。10
 対象プロパティ：全般
 
 サンプル
-- &lt;span class="raku_itemName">&lt;/span>
-- &lt;b class="raku_itemName" style="font-size:110%">&lt;/b>
+- &lt;span data-raku="itemName">&lt;/span>
+- &lt;b data-raku="itemName" style="font-size:110%">&lt;/b>
 
 タグに追加のスタイルや別のclassを定義しても問題ない
 
 結果；
-- &lt;span class="rakul_itemName">実際の商品名&lt;/span>
-- &lt;b class="raku_itemName">実際の商品名&lt;/b>   と置換されます。
+- &lt;span data-raku="itemName">実際の商品名&lt;/span>
+- &lt;b data-raku="itemName">実際の商品名&lt;/b>   と置換されます。
 
 ## URL
 対象プロパティ：itemUrl, affiliateUrl, shopUrlの3種
 
 ルール：
-aタグにプロパティ名に関連したclass名を付ける。raku_itemUrl, raku_affiliateUrl, raku_shopUrlのいずれかになる。
+aタグのdata-rakuにプロパティ名を付ける。
 
 サンプル：
-- &lt;a class="raku_raku_itemUrl" href="">&lt;/a>
+- &lt;a data-raku="raku_itemUrl" href="">&lt;/a>
 
 結果：
-- &lt;a class="raku_raku_itemUrl" href="https//item.rakuten.co.jp/xxx">&lt;/a>
+- &lt;a data-raku="raku_itemUrl" href="https//item.rakuten.co.jp/xxx">&lt;/a>
 
 
 ## image
 対象プロパティ：mediumImageUrls、smallImageUrlsの2つ
 
 ルール：
-imgタグにclass名を付ける。raku_mediumImageUrls, raku_smallImageUrls のどれか。
+imgタグにdata-rakuを付けるとsrcの値として展開される。
 
 サンプル：
-- &lt;img class="raku_raku_smallImageUrls" src="">
+- &lt;img data-raku="raku_smallImageUrls" src="">
 
 結果：
-- &lt;img class="raku_raku_smallImageUrls" href="https//image.rakuten.co.jp/xxx">&lt;/a>
+- &lt;img data-raku="raku_smallImageUrls" href="https//image.rakuten.co.jp/xxx">&lt;/a>
 
 
 imgタグのsrcに画像URLが入る。ただし、画像が複数枚あるときでも1枚目を使う。
