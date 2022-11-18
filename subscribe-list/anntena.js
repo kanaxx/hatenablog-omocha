@@ -17,7 +17,7 @@ javascript: (
 
     const bloglist = [];
 
-    for (let p = 1; p < maxpage; p++) {
+    for (let p = 1; p <= maxpage; p++) {
       console.info('page:%s', p);
       let html = await getHTML(anntena + '?page=' + p);
 
