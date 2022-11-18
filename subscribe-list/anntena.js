@@ -39,19 +39,22 @@ javascript: (
     for (let i in bloglist) {
       let ans = parse(bloglist[i]);
       console.log(ans);
-      summary = summary +
-        `<p>
-                 <img src="${ans.img}" width="48">
-                 <span style="font-size:130%; font-weight:bold">${ans.blogname}</span> <a href="${ans.link}">${ans.title}</a> ${ans.jsttime}
-                 </p>`
+      summary += 
+        `<div style="display: flex;">
+          <div style="width:60px;">
+          <img src="${ans.img}" width="48" >
+          </div>
+          <div style="margin-bottom:10px; width: calc(100% - 60px);">
+          <span style="font-size:115%; font-weight:bold">${ans.blogname}</span><br>
+          <a href="${ans.link}" target="_blank" rel="noopener noreferrer">${ans.title}</a> ${ans.jsttime}
+          </div>
+        </div>`
     }
     //console.log(summary);
+    $('div.l-admin-subscribe-wrapper-left').remove();
     $('div.l-admin-subscribe-wrapper-right').remove();
-    $('div.pager').remove();
-
-    $('ul.subscribed-list').remove();
     $('h1.antenna-heading').text('購読リスト' + bloglist.length);
-    $('div.l-admin-subscribe-wrapper-left').append(summary);
+    $('div.l-admin-subscribe-wrapper').append(summary);
 
 
     //liタグ（ブログ1個分）を解析する
