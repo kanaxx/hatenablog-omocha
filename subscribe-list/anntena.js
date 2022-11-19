@@ -5,9 +5,18 @@
 // ==/ClosureCompiler==
 javascript: (
 
-  async function () {
+  async function (pages,windows) {
     //何ページ目まで繰り返すか、各自で変えてください。
-    const maxpage = 5;
+    let maxpage = 5;
+    //ボタンのクリックで開くウィンドウの数
+    let maxwindows = 5;
+
+    if(Number.isInteger(pages)){
+      maxpage=pages;
+    }
+    if(Number.isInteger(windows)){
+      maxwindows=windows;
+    }
 
     const anntena = 'https://blog.hatena.ne.jp/-/antenna';
     if (window.location.href.indexOf("https://blog.hatena.ne.jp/-/antenna") != 0) {
@@ -46,7 +55,7 @@ javascript: (
           </div>
           <div style="margin-bottom:10px; width: calc(100% - 60px);">
           <span style="font-size:115%; font-weight:bold">${ans.blogname}</span><br>
-          <a href="${ans.link}" target="_blank" rel="noopener noreferrer">${ans.title}</a> ${ans.jsttime}
+          <a href="${ans.link}" target="_blank" rel="noopener noreferrer" class="x_x" data-opened="0">${ans.title}</a> ${ans.jsttime}
           </div>
         </div>`
     }
@@ -55,6 +64,17 @@ javascript: (
     $('div.l-admin-subscribe-wrapper-right').remove();
     $('h1.antenna-heading').text('購読リスト' + bloglist.length);
     $('div.l-admin-subscribe-wrapper').append(summary);
+
+    $('nav.service-nav-actions').prepend(`<a class="service-nav-action-item action-item-edit" id="x_x_open">リンクを${maxwindows}個 開く</a>`);
+    $('#x_x_open').on('click', function(){
+      let links = $('a.x_x[data-opened="0"]');
+      console.log(links.length);
+      for(let i=0; i<links.length && i<maxwindows; i++){
+        links[i].dataset.opened='1';
+        links[i].textContent = links[i].textContent + '✅';
+        window.open(links[i].href);
+      }
+    });
 
 
     //liタグ（ブログ1個分）を解析する
