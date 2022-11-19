@@ -65,7 +65,7 @@ javascript: (
     $('h1.antenna-heading').text('購読リスト' + bloglist.length);
     $('div.l-admin-subscribe-wrapper').append(summary);
 
-    $('nav.service-nav-actions').prepend(`<a class="service-nav-action-item action-item-edit" id="x_x_open">リンクを${maxwindows}個 開く</a>`);
+    $('nav.service-nav-actions').prepend(`<a class="service-nav-action-item action-item-edit" id="x_x_open">リンクを開く</a>`);
     $('#x_x_open').on('click', function(){
       let links = $('a.x_x[data-opened="0"]');
       console.log(links.length);
@@ -74,8 +74,16 @@ javascript: (
         links[i].textContent = links[i].textContent + '✅';
         window.open(links[i].href);
       }
+      updateButtonCaption();
     });
+    
+    updateButtonCaption();
 
+    function updateButtonCaption(){
+      let remains = $('a.x_x[data-opened="0"]').length;
+      let caption = `リンクを${maxwindows}個 開く（残り${remains}）`;
+      $('a#x_x_open').text(caption);
+    }
 
     //liタグ（ブログ1個分）を解析する
     function parse(li) {
