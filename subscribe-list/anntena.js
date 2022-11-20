@@ -74,7 +74,7 @@ javascript: (
       let links = $('a.x_x[data-opened="0"]');
       for(let i=0; i<links.length && i<maxwindows; i++){
         links[i].dataset.opened='1';
-        links[i].textContent = links[i].textContent + '✅';
+        links[i].textContent = '✅'+ links[i].textContent;
         window.open(links[i].href);
       }
       updateButtonCaption();
