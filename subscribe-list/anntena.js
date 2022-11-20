@@ -20,28 +20,30 @@ javascript: (
 
     const anntena = 'https://blog.hatena.ne.jp/-/antenna';
     if (window.location.href.indexOf("https://blog.hatena.ne.jp/-/antenna") != 0) {
-      alert('ページが違うで');
+      alert('ページが違います。購読リストへ移動します');
       window.location.href = anntena;
+      return;
     }
 
+    $('div.l-admin-subscribe-wrapper-left').remove();
+    $('div.l-admin-subscribe-wrapper-right').remove();
+    
     const bloglist = [];
 
     for (let p = 1; p <= maxpage; p++) {
       console.info('page:%s', p);
+      $('h1.antenna-heading').text(`購読リスト：${p}/${maxpage} ページ目`);
       let html = await getHTML(anntena + '?page=' + p);
 
       let li = $(html).find('li.subscribed-list-list');
       console.log('li count = %s', li.length);
 
-      if (li.length > 0) {
-        for (let i = 0; i < li.length; i++) {
-          bloglist.push(li[i]);
-        }
-      } else {
-        break;
+      for (let i = 0; i < li.length; i++) {
+        bloglist.push(li[i]);
       }
     }
 
+    $('h1.antenna-heading').text(`購読リスト：リスト作成中...`);
     console.info('blog count = %s', bloglist.length);
 
     let summary = "";
@@ -59,10 +61,8 @@ javascript: (
           </div>
         </div>`
     }
-    //console.log(summary);
-    $('div.l-admin-subscribe-wrapper-left').remove();
-    $('div.l-admin-subscribe-wrapper-right').remove();
-    $('h1.antenna-heading').text('購読リスト' + bloglist.length);
+
+    $('h1.antenna-heading').text('購読リスト：' + bloglist.length);
     $('div.l-admin-subscribe-wrapper').append(summary);
 
     $('nav.service-nav-actions').prepend(
@@ -72,7 +72,6 @@ javascript: (
     );
     $('#x_x_open').on('click', function(){
       let links = $('a.x_x[data-opened="0"]');
-      console.log(links.length);
       for(let i=0; i<links.length && i<maxwindows; i++){
         links[i].dataset.opened='1';
         links[i].textContent = links[i].textContent + '✅';
