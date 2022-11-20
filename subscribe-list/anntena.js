@@ -32,7 +32,7 @@ javascript: (
 
     for (let p = 1; p <= maxpage; p++) {
       console.info('page:%s', p);
-      $('h1.antenna-heading').text(`購読リスト：${p}/${maxpage} ページ目`);
+      updateCaption(`${p}/${maxpage} ページ目`);
       let html = await getHTML(anntena + '?page=' + p);
 
       let li = $(html).find('li.subscribed-list-list');
@@ -43,7 +43,7 @@ javascript: (
       }
     }
 
-    $('h1.antenna-heading').text(`購読リスト：リスト作成中...`);
+    updateCaption(`リスト作成中...`);
     console.info('blog count = %s', bloglist.length);
 
     let summary = "";
@@ -62,7 +62,7 @@ javascript: (
         </div>`
     }
 
-    $('h1.antenna-heading').text('購読リスト：' + bloglist.length);
+    updateCaption(bloglist.length);
     $('div.l-admin-subscribe-wrapper').append(summary);
 
     $('nav.service-nav-actions').prepend(
@@ -82,11 +82,13 @@ javascript: (
 
     updateButtonCaption();
 
-    function updateButtonCaption(){
+    function updateButtonCaption(text){
       let remains = $('a.x_x[data-opened="0"]').length;
       $('span#x_x_remains').text(remains);
     }
-
+    function updateCaption(text){
+      $('h1.antenna-heading').text('購読リスト：' + text);
+    }
     //liタグ（ブログ1個分）を解析する
     function parse(li) {
       const target = $(li);
