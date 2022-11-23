@@ -20,9 +20,11 @@ javascript: (
 
     const anntena = 'https://blog.hatena.ne.jp/-/antenna';
     if (window.location.href.indexOf("https://blog.hatena.ne.jp/-/antenna") != 0) {
-      alert('ページが違います。購読リストへ移動します');
-      window.location.href = anntena;
-      return;
+      let ans = confirm('ページが違います。購読リストへ移動します');
+      if(ans){
+        window.location.href = anntena;
+        return;
+      }
     }
 
     $('div.l-admin-subscribe-wrapper-left').remove();
@@ -112,4 +114,4 @@ javascript: (
       return html;
     }
   }
-)();
+)(5,5);
